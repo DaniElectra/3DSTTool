@@ -1,4 +1,5 @@
 # 3DSTTool  
+![GitHub](https://img.shields.io/github/license/DaniElectra/3DSTTool?style=for-the-badge) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/DaniElectra/3DSTTool?style=for-the-badge)  
 3DSTTool is a command-line tool for managing 3DST files from the Nintendo Anime Channel application.  
 
 ## Features  
@@ -49,7 +50,18 @@
 ### To-do list  
 The project is in a **very early** state, since it's my first time coding in C# from scratch. There are some pending features that I want to add:  
 
-- Support for more 3DST image formats (it only supports RGBA8 currently)  
+- Support for more 3DST image formats:  
+
+|          | Is supported? |
+|----------|:-------------:|
+| RGBA8    |       ✅       |
+| RGB8     |       ✅       |
+| A8       |       ✅       |
+| ETC1     |       ❌       |
+| RGBA5551 |       ❌       |
+| RGBA565  |       ❌       |
+| RGBA4    |       ✅       | 
+
 - Write the documentation  
 - Test compatibility on Linux
 - Support for multiple images at once (multithreading?)
