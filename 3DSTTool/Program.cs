@@ -23,7 +23,8 @@ namespace _3DSTTool
             [Option('h', "height", HelpText = "Specify the height of the output image. Must be a power of 2.")]
             public short Height { get; set; }
 
-            [Option('f', "format", Default = "rgba8", HelpText = "The format type to use when saving.")]
+            [Option('f', "format", Default = "rgba8", HelpText = "The format type to use when saving.\n" +
+                "Available options: rgba8, rgb8, a8, rgba4")]
             public string Format { get; set; }
             
             [Option('y', "flip", HelpText = "Flip the image when saving.")]
@@ -45,7 +46,8 @@ namespace _3DSTTool
             [Option('h', "height", HelpText = "Specify the height of the output image.")]
             public short Height { get; set; }
 
-            [Option('f', "format", Default = "png", HelpText = "The image format to use when saving.")]
+            [Option('f', "format", Default = "png", HelpText = "The image format to use when saving.\n" +
+                "Available options: bmp, emf, exif, gif, ico / icon, png, jpg / jpeg, tiff, wmf")]
             public string Format { get; set; }
 
             [Option('y', "flip", HelpText = "Flip the image when saving.")]
