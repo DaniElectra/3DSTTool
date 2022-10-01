@@ -9,7 +9,12 @@ namespace _3DSTTool
 {
     internal class Decode
     {
-        public static int DecodeImage(string input, string output, string format_output, bool flip)
+        public static int DecodeImage(string input,
+                                      string output,
+                                      short width_given,
+                                      short height_given,
+                                      string format_output,
+                                      bool flip)
         {
             var input_file = File.OpenRead(input);
             BinaryReader input_read = new BinaryReader(input_file);
@@ -56,6 +61,37 @@ namespace _3DSTTool
                     break;
                 default:
                     throw new NotImplementedException("3DST file format currently not supported!");
+            }
+
+            short new_width = width;
+            short new_height = height;
+
+            // Check if given width and / or height exists
+            if (width_given != 0)
+            {
+                new_width = width_given;
+            }
+            if (height_given != 0)
+            {
+                new_height = height_given;
+            }
+
+            // If whether a valid width or height has been given, create a new bitmap using that value(s)
+            if (new_width != width)
+            {
+                if (new_height != height)
+                {
+                    bitmap = new Bitmap(bitmap, new_width, new_height);
+                }
+                else
+                {
+                    bitmap = new Bitmap(bitmap, new_width, height);
+                }
+            }
+
+            if (new_height != height && new_width == width)
+            {
+                bitmap = new Bitmap(bitmap, width, new_height);
             }
 
             // Since the Nintendo 3DS flips the images when loading,

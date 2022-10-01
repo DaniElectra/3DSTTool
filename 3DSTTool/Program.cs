@@ -17,6 +17,12 @@ namespace _3DSTTool
             [Value(1, Required = true, MetaName = "output", HelpText = "The 3DST file save location.")]
             public string Output { get; set; }
 
+            [Option('w', "width", HelpText = "Specify the width of the output image. Must be a power of 2.")]
+            public short Width { get; set; }
+
+            [Option('h', "height", HelpText = "Specify the height of the output image. Must be a power of 2.")]
+            public short Height { get; set; }
+
             [Option('f', "format", Default = "rgba8", HelpText = "The format type to use when saving.")]
             public string Format { get; set; }
             
@@ -32,7 +38,13 @@ namespace _3DSTTool
 
             [Value(1, Required = true, MetaName = "output", HelpText = "The image file save location.")]
             public string Output { get; set; }
-            
+
+            [Option('w', "width", HelpText = "Specify the width of the output image.")]
+            public short Width { get; set; }
+
+            [Option('h', "height", HelpText = "Specify the height of the output image.")]
+            public short Height { get; set; }
+
             [Option('f', "format", Default = "png", HelpText = "The image format to use when saving.")]
             public string Format { get; set; }
 
@@ -55,9 +67,11 @@ namespace _3DSTTool
         {
             var input = opts.Input;
             var output = opts.Output;
+            var width = opts.Width;
+            var height = opts.Height;
             var format = opts.Format;
             var flip = opts.Flip;
-            var result = Encode.EncodeImage(input, output, format, flip);
+            var result = Encode.EncodeImage(input, output, width, height, format, flip);
             // If file was encoded without errors, inform about that on the command line
             if (result == 0)
             {
@@ -71,9 +85,11 @@ namespace _3DSTTool
         {
             var input = opts.Input;
             var output = opts.Output;
+            var width = opts.Width;
+            var height = opts.Height;
             var format = opts.Format;
             var flip = opts.Flip;
-            var result = Decode.DecodeImage(input, output, format, flip);
+            var result = Decode.DecodeImage(input, output, width, height, format, flip);
             // If file was encoded without errors, inform about that on the command line
             if (result == 0)
             {
