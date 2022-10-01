@@ -26,7 +26,7 @@ namespace _3DSTTool
             [Option('f', "format", Default = "rgba8", HelpText = "The format type to use when saving.")]
             public string Format { get; set; }
             
-            [Option('y', "flip", Default = false, HelpText = "Flip the image when saving.")]
+            [Option('y', "flip", HelpText = "Flip the image when saving.")]
             public bool Flip { get; set; }
         }
         
@@ -48,7 +48,7 @@ namespace _3DSTTool
             [Option('f', "format", Default = "png", HelpText = "The image format to use when saving.")]
             public string Format { get; set; }
 
-            [Option('y', "flip", Default = false, HelpText = "Flip the image when saving.")]
+            [Option('y', "flip", HelpText = "Flip the image when saving.")]
             public bool Flip { get; set; }
         }
 
