@@ -51,6 +51,9 @@ namespace _3DSTTool
                 case 2:
                     A8.Decode(data, width, height, bitmap);
                     break;
+                case 7:
+                    RGBA4.Decode(data, width, height, bitmap);
+                    break;
                 default:
                     throw new NotImplementedException("3DST file format currently not supported!");
             }
