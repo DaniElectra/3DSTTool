@@ -6,7 +6,7 @@
     <RootNamespace>_3DSTTool</RootNamespace>
     <Authors>DaniElectra</Authors>
     <Title>3DSTTool</Title>
-    <Version>0.0.1</Version>
+    <Version>0.1.0</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>3DSTTool is a command-line tool for managing 3DST files from the Nintendo Anime Channel application.</Description>
