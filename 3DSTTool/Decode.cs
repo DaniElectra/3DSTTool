@@ -45,6 +45,9 @@ namespace _3DSTTool
                 case 0:
                     RGBA8.Decode(data, width, height, bitmap);
                     break;
+                case 1:
+                    RGB8.Decode(data, width, height, bitmap);
+                    break;
                 default:
                     throw new NotImplementedException("3DST file format currently not supported!");
             }
