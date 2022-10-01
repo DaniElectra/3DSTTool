@@ -6,6 +6,7 @@
 - **Encode** a given image to a 3DST file:  
 ```
 ./3DSTTool encode
+
   -w, --width        Specify the width of the output image. Must be a power of 2.
 
   -h, --height       Specify the height of the output image. Must be a power of 2.
