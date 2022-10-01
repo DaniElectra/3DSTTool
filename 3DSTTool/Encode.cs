@@ -49,6 +49,11 @@ namespace _3DSTTool
                     bitmap_raw = new byte[bitmap.Width * bitmap.Height * 3];
                     RGB8.Encode(bitmap, bitmap_raw);
                     break;
+                case "a8":
+                    format = 2;
+                    bitmap_raw = new byte[bitmap.Width * bitmap.Height];
+                    A8.Encode(bitmap, bitmap_raw);
+                    break;
                 default:
                     throw new NotImplementedException("Selected format currently not supported!");
             }
