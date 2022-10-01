@@ -3,8 +3,47 @@
 
 ## Features  
 
-- **Encode** a given image to a 3DST file: `3DSTTool.exe encode input.png output.3dst`  
-- **Decode** a given 3DST file to an image: `3DSTTool.exe decode input.3dst output.png`  
+- **Encode** a given image to a 3DST file:  
+```
+./3DSTTool encode
+  -w, --width        Specify the width of the output image. Must be a power of 2.
+
+  -h, --height       Specify the height of the output image. Must be a power of 2.
+
+  -f, --format       (Default: rgba8) The format type to use when saving.
+  Available options: rgba8, rgb8, a8, rgba4
+
+  -y, --flip         Flip the image when saving.
+
+  --help             Display this help screen.
+
+  --version          Display version information.
+
+  input (pos. 0)     Required. The image file to convert.
+
+  output (pos. 1)    Required. The 3DST file save location.
+```  
+- **Decode** a given 3DST file to an image:  
+```
+./3DSTTool decode
+
+  -w, --width        Optional: Specify the width of the output image.
+
+  -h, --height       Optional: Specify the height of the output image.
+
+  -f, --format       (Default: png) The image format to use when saving.
+  Available options: bmp, emf, exif, gif, ico / icon, png, jpg / jpeg, tiff, wmf
+
+  -y, --flip         Flip the image when saving.
+
+  --help             Display this help screen.
+
+  --version          Display version information.
+
+  input (pos. 0)     Required. The 3DST file to convert.
+
+  output (pos. 1)    Required. The image file save location.
+```  
 
 ### To-do list  
 The project is in a **very early** state, since it's my first time coding in C# from scratch. There are some pending features that I want to add:  
@@ -13,6 +52,13 @@ The project is in a **very early** state, since it's my first time coding in C# 
 - Write the documentation  
 - Test compatibility on Linux
 - Support for multiple images at once (multithreading?)
+
+## Build  
+To build the tool, you will need the following NuGet packages:  
+
+- [CommandLineParser](https://www.nuget.org/packages/CommandLineParser) 2.9.1  
+- [System.Drawing.Common](https://www.nuget.org/packages/System.Drawing.Common) 6.0.0  
+- [System.Memory.Data](https://www.nuget.org/packages/System.Memory.Data) 6.0.0
 
 ## License  
 This project can licensed under the [LGPL-3.0](LICENSE) license or any later version.  
