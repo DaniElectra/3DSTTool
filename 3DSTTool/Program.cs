@@ -47,7 +47,7 @@ namespace _3DSTTool
             public short Height { get; set; }
 
             [Option('f', "format", Default = "png", HelpText = "The image format to use when saving.\n" +
-                "Available options: bmp, emf, exif, gif, ico / icon, png, jpg / jpeg, tiff, wmf")]
+                "Available options: astc, avif, bmp, dng, gif, heif, ico / icon, jpg / jpeg, ktx, pkm, png, wbmp, webp")]
             public string Format { get; set; }
 
             [Option('y', "flip", HelpText = "Flip the image when saving.")]

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
+using SkiaSharp;
 using System.IO;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
@@ -17,7 +16,7 @@ namespace _3DSTTool
                                       string format_output,
                                       bool flip)
         {
-            Bitmap bitmap = new Bitmap(input);
+            SKBitmap bitmap = SKBitmap.Decode(input);
             short width = (short)bitmap.Width;
             short height = (short)bitmap.Height;
 
@@ -69,13 +68,16 @@ namespace _3DSTTool
             }
 
             // Assign the resolution to the bitmap
-            bitmap = new Bitmap(bitmap, new_width, new_height);
+            SKBitmap new_bitmap = new SKBitmap(new_width, new_height);
+            bitmap.ScalePixels(new_bitmap, SKFilterQuality.High);
 
             // Since the Nintendo 3DS flips the images when loading,
             // give the option to do the same when encoding
             if (flip)
             {
-                bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                SKCanvas canvas = new SKCanvas(new_bitmap);
+                canvas.Scale(1, -1, 0, new_bitmap.Height / 2);
+                canvas.DrawBitmap(new_bitmap, new SKPoint());
             }
 
             // Encode the image with the proper format
@@ -85,23 +87,23 @@ namespace _3DSTTool
             {
                 case "rgba8":
                     format = 0;
-                    bitmap_raw = new byte[bitmap.Width * bitmap.Height * 4];
-                    RGBA8.Encode(bitmap, bitmap_raw);
+                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height * 4];
+                    RGBA8.Encode(new_bitmap, bitmap_raw);
                     break;
                 case "rgb8":
                     format = 1;
-                    bitmap_raw = new byte[bitmap.Width * bitmap.Height * 3];
-                    RGB8.Encode(bitmap, bitmap_raw);
+                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height * 3];
+                    RGB8.Encode(new_bitmap, bitmap_raw);
                     break;
                 case "a8":
                     format = 2;
-                    bitmap_raw = new byte[bitmap.Width * bitmap.Height];
-                    A8.Encode(bitmap, bitmap_raw);
+                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height];
+                    A8.Encode(new_bitmap, bitmap_raw);
                     break;
                 case "rgba4":
                     format = 7;
-                    bitmap_raw = new byte[bitmap.Width * bitmap.Height * 2];
-                    RGBA4.Encode(bitmap, bitmap_raw);
+                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height * 2];
+                    RGBA4.Encode(new_bitmap, bitmap_raw);
                     break;
                 default:
                     throw new NotImplementedException("Selected format currently not supported!");

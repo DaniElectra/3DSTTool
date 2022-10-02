@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
+using SkiaSharp;
 using System.IO;
 using System.Text;
 
@@ -44,7 +43,7 @@ namespace _3DSTTool
             input_read.Close();
 
             // Determine which format the image uses, and decode it with the proper tool
-            Bitmap bitmap = new Bitmap(width, height);
+            SKBitmap bitmap = new SKBitmap(width, height);
             switch (format)
             {
                 case 0:
@@ -65,6 +64,7 @@ namespace _3DSTTool
 
             short new_width = width;
             short new_height = height;
+            SKBitmap new_bitmap = bitmap;
 
             // Check if given width and / or height exists
             if (width_given != 0)
@@ -81,57 +81,72 @@ namespace _3DSTTool
             {
                 if (new_height != height)
                 {
-                    bitmap = new Bitmap(bitmap, new_width, new_height);
+                    new_bitmap = new SKBitmap(new_width, new_height);
+                    bitmap.ScalePixels(new_bitmap, SKFilterQuality.Medium);
                 }
                 else
                 {
-                    bitmap = new Bitmap(bitmap, new_width, height);
+                    new_bitmap = new SKBitmap(new_width, height);
+                    bitmap.ScalePixels(new_bitmap, SKFilterQuality.Medium);
                 }
             }
 
             if (new_height != height && new_width == width)
             {
-                bitmap = new Bitmap(bitmap, width, new_height);
+                new_bitmap = new SKBitmap(width, new_height);
+                bitmap.ScalePixels(new_bitmap, SKFilterQuality.High);
             }
 
             // Since the Nintendo 3DS flips the images when loading,
             // give the option to do the same when decoding
             if (flip)
             {
-                bitmap.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                SKCanvas canvas = new SKCanvas(new_bitmap);
+                canvas.Scale(1, -1, 0, new_bitmap.Height / 2);
+                canvas.DrawBitmap(new_bitmap, new SKPoint());
             }
 
             // Save bitmap based on given output format
+            SKFileWStream save_file = new SKFileWStream(output);
             switch (format_output)
             {
+                case "astc":
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Astc, 80);
+                    break;
+                case "avif":
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Avif, 80);
+                    break;
                 case "bmp":
-                    bitmap.Save(output, ImageFormat.Bmp);
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Bmp, 80);
                     break;
-                case "emf":
-                    bitmap.Save(output, ImageFormat.Emf);
-                    break;
-                case "exif":
-                    bitmap.Save(output, ImageFormat.Exif);
+                case "dng":
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Dng, 80);
                     break;
                 case "gif":
-                    bitmap.Save(output, ImageFormat.Gif);
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Gif, 80);
                     break;
                 case "ico":
                 case "icon":
-                    bitmap.Save(output, ImageFormat.Icon);
-                    break;
-                case "png":
-                    bitmap.Save(output, ImageFormat.Png);
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Ico, 80);
                     break;
                 case "jpg":
                 case "jpeg":
-                    bitmap.Save(output, ImageFormat.Jpeg);
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Jpeg, 80);
                     break;
-                case "tiff":
-                    bitmap.Save(output, ImageFormat.Tiff);
+                case "ktx":
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Ktx, 80);
                     break;
-                case "wmf":
-                    bitmap.Save(output, ImageFormat.Wmf);
+                case "pkm":
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Pkm, 80);
+                    break;
+                case "png":
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Png, 80);
+                    break;
+                case "wbmp":
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Wbmp, 80);
+                    break;
+                case "webp":
+                    new_bitmap.Encode(save_file, SKEncodedImageFormat.Webp, 80);
                     break;
                 default:
                     throw new Exception("Unsupported output format!");

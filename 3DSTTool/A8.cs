@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SkiaSharp;
 using System.Text;
 
 namespace _3DSTTool
@@ -12,7 +12,7 @@ namespace _3DSTTool
         // The order that pixels have per block in this format
         private static int[] tile_order = { 0, 1, 8, 9, 2, 3, 10, 11, 16, 17, 24, 25, 18, 19, 26, 27, 4, 5, 12, 13, 6, 7, 14, 15, 20, 21, 28, 29, 22, 23, 30, 31, 32, 33, 40, 41, 34, 35, 42, 43, 48, 49, 56, 57, 50, 51, 58, 59, 36, 37, 44, 45, 38, 39, 46, 47, 52, 53, 60, 61, 54, 55, 62, 63 };
 
-        public static void Encode(Bitmap bitmap, byte[] output)
+        public static void Encode(SKBitmap bitmap, byte[] output)
         {
             int pixel_count = 0;
 
@@ -30,15 +30,15 @@ namespace _3DSTTool
                         int pixel_y = By * 8 + y;
 
                         // Get alpha for specified pixel
-                        Color pixel_color = bitmap.GetPixel(pixel_x, pixel_y);
-                        output[tile_count + pixel_count] = pixel_color.A;
+                        SKColor pixel_color = bitmap.GetPixel(pixel_x, pixel_y);
+                        output[tile_count + pixel_count] = pixel_color.Alpha;
                     }
                     pixel_count += 64;
                 }
             }
         }
 
-        public static void Decode(byte[] input, short width, short height, Bitmap bitmap)
+        public static void Decode(byte[] input, short width, short height, SKBitmap bitmap)
         {
             int pixel_count = 0;
 
@@ -56,10 +56,10 @@ namespace _3DSTTool
                         int pixel_y = By * 8 + y;
 
                         // Save the alpha parameter on integer
-                        int alpha = input[tile_count + pixel_count];
+                        byte alpha = input[tile_count + pixel_count];
 
                         // Save the pixel into the bitmap
-                        Color color = Color.FromArgb(alpha, 0, 0, 0);
+                        SKColor color = new SKColor(0, 0, 0, alpha);
                         bitmap.SetPixel(pixel_x, pixel_y, color);
                     }
                     pixel_count += 64;

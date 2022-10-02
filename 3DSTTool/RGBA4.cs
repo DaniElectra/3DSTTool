@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using SkiaSharp;
 using System.Text;
 
 namespace _3DSTTool
@@ -12,7 +12,7 @@ namespace _3DSTTool
         // The order that pixels have per block in this format
         private static int[] tile_order = { 0, 1, 8, 9, 2, 3, 10, 11, 16, 17, 24, 25, 18, 19, 26, 27, 4, 5, 12, 13, 6, 7, 14, 15, 20, 21, 28, 29, 22, 23, 30, 31, 32, 33, 40, 41, 34, 35, 42, 43, 48, 49, 56, 57, 50, 51, 58, 59, 36, 37, 44, 45, 38, 39, 46, 47, 52, 53, 60, 61, 54, 55, 62, 63 };
 
-        public static void Encode(Bitmap bitmap, byte[] output)
+        public static void Encode(SKBitmap bitmap, byte[] output)
         {
             int pixel_count = 0;
 
@@ -30,11 +30,11 @@ namespace _3DSTTool
                         int pixel_y = By * 8 + y;
 
                         // Get color parameters for specified pixel
-                        Color pixel_color = bitmap.GetPixel(pixel_x, pixel_y);
-                        int alpha = (int)Math.Round((decimal)(pixel_color.A / 16));
-                        int blue = (int)Math.Round((decimal)(pixel_color.B / 16));
-                        int green = (int)Math.Round((decimal)(pixel_color.G / 16));
-                        int red = (int)Math.Round((decimal)(pixel_color.R / 16));
+                        SKColor pixel_color = bitmap.GetPixel(pixel_x, pixel_y);
+                        int alpha = (int)Math.Round((decimal)(pixel_color.Alpha / 16));
+                        int blue = (int)Math.Round((decimal)(pixel_color.Blue / 16));
+                        int green = (int)Math.Round((decimal)(pixel_color.Green / 16));
+                        int red = (int)Math.Round((decimal)(pixel_color.Red / 16));
                         
                         // Move blue and red to left side of byte
                         output[tile_count * 2 + pixel_count] = (byte)(alpha + (blue << 4));
@@ -45,7 +45,7 @@ namespace _3DSTTool
             }
         }
 
-        public static void Decode(byte[] input, short width, short height, Bitmap bitmap)
+        public static void Decode(byte[] input, short width, short height, SKBitmap bitmap)
         {
             int byte_count = 0;
             int pixel_count = 0;
@@ -74,7 +74,7 @@ namespace _3DSTTool
                         byte_count++;
 
                         // Save the pixel into the bitmap
-                        Color color = Color.FromArgb(alpha * 16, red * 16, green * 16, blue * 16);
+                        SKColor color = new SKColor((byte)(red * 16), (byte)(green * 16), (byte)(blue * 16), (byte)(alpha * 16));
                         bitmap.SetPixel(pixel_x, pixel_y, color);
                     }
                     pixel_count += 128;
