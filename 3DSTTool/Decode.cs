@@ -82,12 +82,12 @@ namespace _3DSTTool
                 if (new_height != height)
                 {
                     new_bitmap = new SKBitmap(new_width, new_height);
-                    bitmap.ScalePixels(new_bitmap, SKFilterQuality.Medium);
+                    bitmap.ScalePixels(new_bitmap, SKFilterQuality.High);
                 }
                 else
                 {
                     new_bitmap = new SKBitmap(new_width, height);
-                    bitmap.ScalePixels(new_bitmap, SKFilterQuality.Medium);
+                    bitmap.ScalePixels(new_bitmap, SKFilterQuality.High);
                 }
             }
 
