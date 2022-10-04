@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using SkiaSharp;
 using System.IO;
+using System.Threading.Tasks;
 using System.Text;
 
 namespace _3DSTTool
 {
     internal class Decode
     {
-        public static int DecodeImage(string input,
-                                      string output,
+        public static async Task<int> DecodeImage(string input,
                                       short width_given,
                                       short height_given,
                                       string format_output,
@@ -107,45 +107,70 @@ namespace _3DSTTool
             }
 
             // Save bitmap based on given output format
-            SKFileWStream save_file = new SKFileWStream(output);
+            string output;
+            SKFileWStream save_file;
             switch (format_output)
             {
                 case "astc":
+                    output = Path.ChangeExtension(input, "astc");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Astc, 80);
                     break;
                 case "avif":
+                    output = Path.ChangeExtension(input, "avif");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Avif, 80);
                     break;
                 case "bmp":
+                    output = Path.ChangeExtension(input, "bmp");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Bmp, 80);
                     break;
                 case "dng":
+                    output = Path.ChangeExtension(input, "dng");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Dng, 80);
                     break;
                 case "gif":
+                    output = Path.ChangeExtension(input, "gif");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Gif, 80);
                     break;
                 case "ico":
                 case "icon":
+                    output = Path.ChangeExtension(input, "ico");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Ico, 80);
                     break;
                 case "jpg":
                 case "jpeg":
+                    output = Path.ChangeExtension(input, "jpg");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Jpeg, 80);
                     break;
                 case "ktx":
+                    output = Path.ChangeExtension(input, "ktx");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Ktx, 80);
                     break;
                 case "pkm":
+                    output = Path.ChangeExtension(input, "pkm");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Pkm, 80);
                     break;
                 case "png":
+                    output = Path.ChangeExtension(input, "png");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Png, 80);
                     break;
                 case "wbmp":
+                    output = Path.ChangeExtension(input, "wbmp");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Wbmp, 80);
                     break;
                 case "webp":
+                    output = Path.ChangeExtension(input, "webp");
+                    save_file = new SKFileWStream(output);
                     new_bitmap.Encode(save_file, SKEncodedImageFormat.Webp, 80);
                     break;
                 default:

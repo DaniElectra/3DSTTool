@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SkiaSharp;
 using System.IO;
+using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
 
@@ -9,8 +10,7 @@ namespace _3DSTTool
 {
     internal class Encode
     {
-        public static int EncodeImage(string input,
-                                      string output,
+        public static async Task<int> EncodeImage(string input,
                                       short width_given,
                                       short height_given,
                                       string format_output,
@@ -123,12 +123,16 @@ namespace _3DSTTool
             write_header.Write(format);
             write_header.Close();
 
+            // Get file extension for output
+            string output = Path.ChangeExtension(input, "3dst");
+            
             // Write the header and the data to given output
             var output_file = File.OpenWrite(output);
             var file_write = new BinaryWriter(output_file);
             file_write.Write(header);
             file_write.Write(bitmap_raw);
             file_write.Close();
+            Console.WriteLine("We are here!");
             return 0;
         }
     }
