@@ -29,9 +29,9 @@
 ```
 ./3DSTTool decode
 
-  -w, --width        Optional: Specify the width of the output image.
+  -w, --width        Specify the width of the output image.
 
-  -h, --height       Optional: Specify the height of the output image.
+  -h, --height       Specify the height of the output image.
 
   -f, --format       (Default: png) The image format to use when saving.
   Available options: astc, avif, bmp, dng, gif, heif, ico / icon, jpg / jpeg, ktx, pkm, png, wbmp, webp
@@ -70,7 +70,7 @@ The project is in a **very early** state, since it's my first time coding in C# 
 To build the tool, you will need .NET Core 3.1 and the following NuGet packages:  
 
 - [CommandLineParser](https://www.nuget.org/packages/CommandLineParser) 2.9.1  
-- [SkiaSharp](https://www.nuget.org/packages/SkiaSharp) 6.0.0  
+- [SkiaSharp](https://www.nuget.org/packages/SkiaSharp) 2.88.2  
 - [System.Memory.Data](https://www.nuget.org/packages/System.Memory.Data) 6.0.0
 
 ## License  
