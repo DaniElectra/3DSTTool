@@ -76,7 +76,7 @@ namespace _3DSTTool
             if (flip)
             {
                 SKCanvas canvas = new SKCanvas(new_bitmap);
-                canvas.Scale(1, -1, 0, new_bitmap.Height / 2);
+                canvas.Scale(1, -1, 0, new_height / 2);
                 canvas.DrawBitmap(new_bitmap, new SKPoint());
             }
 
@@ -87,22 +87,22 @@ namespace _3DSTTool
             {
                 case "rgba8":
                     format = 0;
-                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height * 4];
+                    bitmap_raw = new byte[new_width * new_height * 4];
                     RGBA8.Encode(new_bitmap, bitmap_raw);
                     break;
                 case "rgb8":
                     format = 1;
-                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height * 3];
+                    bitmap_raw = new byte[new_width * new_height * 3];
                     RGB8.Encode(new_bitmap, bitmap_raw);
                     break;
                 case "a8":
                     format = 2;
-                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height];
+                    bitmap_raw = new byte[new_width * new_height];
                     A8.Encode(new_bitmap, bitmap_raw);
                     break;
                 case "rgba4":
                     format = 7;
-                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height * 2];
+                    bitmap_raw = new byte[new_width * new_height * 2];
                     RGBA4.Encode(new_bitmap, bitmap_raw);
                     break;
                 default:
@@ -132,7 +132,10 @@ namespace _3DSTTool
             file_write.Write(header);
             file_write.Write(bitmap_raw);
             file_write.Close();
-            Console.WriteLine("We are here!");
+
+            // If file was encoded without errors, inform about that on the command line
+            Console.WriteLine("{0} encoded successfully!\n" +
+                "Result {1} file was saved into {2}", input, format_output, output);
             return 0;
         }
     }

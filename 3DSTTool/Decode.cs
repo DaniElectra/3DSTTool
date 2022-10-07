@@ -176,6 +176,10 @@ namespace _3DSTTool
                 default:
                     throw new Exception("Unsupported output format!");
             }
+
+            // If file was decoded without errors, inform about that on the command line
+            Console.WriteLine("{0} decoded successfully!\n" +
+                "Result {1} file was saved into {2}", input, format_output, output);
             return 0;
         }
     }
