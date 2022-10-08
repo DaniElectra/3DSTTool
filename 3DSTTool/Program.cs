@@ -4,6 +4,7 @@ using System.Threading;
 using System.Collections.Generic;
 using CommandLine;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace _3DSTTool
 {
@@ -15,6 +16,9 @@ namespace _3DSTTool
         {
             [Value(0, Required = true, MetaName = "input", HelpText = "The image file(s) to convert.")]
             public IEnumerable<string> Input { get; set; }
+
+            [Option('o', "output", HelpText = "The 3DST file save location.")]
+            public string Output { get; set; }
 
             [Option('w', "width", HelpText = "Specify the width of the output image(s). Must be a power of 2.")]
             public short Width { get; set; }
@@ -35,6 +39,9 @@ namespace _3DSTTool
         {
             [Value(0, Required = true, MetaName = "input", HelpText = "The 3DST file(s) to convert.")]
             public IEnumerable<string> Input { get; set; }
+
+            [Option('o', "output", HelpText = "The image file save location.")]
+            public string Output { get; set; }
 
             [Option('w', "width", HelpText = "Specify the width of the output image(s).")]
             public short Width { get; set; }
@@ -64,14 +71,24 @@ namespace _3DSTTool
         static async Task<int> EncodeParser(EncodeOptions opts)
         {
             var input = opts.Input;
+            var output = opts.Output;
             var width = opts.Width;
             var height = opts.Height;
             var format = opts.Format;
             var flip = opts.Flip;
+
+            // If there's more than one input, tell the encoder to add the Task ID
+            // to the output filename when it's given by the user
+            bool use_taskid = false;
+            if (input.Count() > 1 && output != null)
+            {
+                use_taskid = true;
+            }
+
             var tasks = new List<Task>();
             foreach (var i in input)
             {
-                tasks.Add(Task.Run(async() => await Encode.EncodeImage(i, width, height, format, flip)));
+                tasks.Add(Task.Run(async() => await Encode.EncodeImage(i, output, width, height, format, flip, use_taskid)));
             }
             await Task.WhenAll(tasks);
             return 0;
@@ -80,14 +97,24 @@ namespace _3DSTTool
         static async Task<int> DecodeParser(DecodeOptions opts)
         {
             var input = opts.Input;
+            var output = opts.Output;
             var width = opts.Width;
             var height = opts.Height;
             var format = opts.Format;
             var flip = opts.Flip;
+
+            // If there's more than one input, tell the decoder to add the Task ID
+            // to the output filename when it's given by the user
+            bool use_taskid = false;
+            if (input.Count() > 1 && output != null)
+            {
+                use_taskid = true;
+            }
+
             var tasks = new List<Task>();
             foreach (var i in input)
             {
-                tasks.Add(Task.Run(async() => await Decode.DecodeImage(i, width, height, format, flip)));
+                tasks.Add(Task.Run(async() => await Decode.DecodeImage(i, output, width, height, format, flip, use_taskid)));
             }
             await Task.WhenAll(tasks);
             return 0;

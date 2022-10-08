@@ -11,10 +11,12 @@ namespace _3DSTTool
     internal class Encode
     {
         public static async Task<int> EncodeImage(string input,
-                                      short width_given,
-                                      short height_given,
-                                      string format_output,
-                                      bool flip)
+                                                  string output_given,
+                                                  short width_given,
+                                                  short height_given,
+                                                  string format_output,
+                                                  bool flip,
+                                                  bool use_taskid)
         {
             SKBitmap bitmap = SKBitmap.Decode(input);
             short width = (short)bitmap.Width;
@@ -123,8 +125,20 @@ namespace _3DSTTool
             write_header.Write(format);
             write_header.Close();
 
-            // Get file extension for output
-            string output = Path.ChangeExtension(input, "3dst");
+            string output = output_given;
+            
+            // If output isn't specified, get file extension for output from input
+            output ??= Path.ChangeExtension(input, "3dst");
+
+            string output_path = Path.GetDirectoryName(output);
+            string output_filename = Path.GetFileNameWithoutExtension(output);
+            string output_extension = Path.GetExtension(output);
+
+            // If more than one input was given and output was specified, enumerate the files using Task ID
+            if (use_taskid == true)
+            {
+                output = Path.Combine(output_path, output_filename + Task.CurrentId + output_extension);
+            }
             
             // Write the header and the data to given output
             var output_file = File.OpenWrite(output);
