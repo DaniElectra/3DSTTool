@@ -8,43 +8,43 @@
 ```
 ./3DSTTool encode
 
-  -w, --width        Specify the width of the output image. Must be a power of 2.
+  -o, --output      The 3DST file save location.
 
-  -h, --height       Specify the height of the output image. Must be a power of 2.
+  -w, --width       Specify the width of the output image(s). Must be a power of 2.
 
-  -f, --format       (Default: rgba8) The format type to use when saving.
+  -h, --height      Specify the height of the output image(s). Must be a power of 2.
+
+  -f, --format      (Default: rgba8) The format type to use when saving.
   Available options: rgba8, rgb8, a8, rgba4
 
-  -y, --flip         Flip the image when saving.
+  -y, --flip        Flip the image(s) when saving.
 
-  --help             Display this help screen.
+  --help            Display this help screen.
 
-  --version          Display version information.
+  --version         Display version information.
 
-  input (pos. 0)     Required. The image file to convert.
-
-  output (pos. 1)    Required. The 3DST file save location.
+  input (pos. 0)    Required. The image file(s) to convert.
 ```  
 - **Decode** a given 3DST file to an image:  
 ```
 ./3DSTTool decode
 
-  -w, --width        Specify the width of the output image.
+  -o, --output      The image file save location.
 
-  -h, --height       Specify the height of the output image.
+  -w, --width       Specify the width of the output image(s).
 
-  -f, --format       (Default: png) The image format to use when saving.
+  -h, --height      Specify the height of the output image(s).
+
+  -f, --format      (Default: png) The image format to use when saving.
   Available options: astc, avif, bmp, dng, gif, heif, ico / icon, jpg / jpeg, ktx, pkm, png, wbmp, webp
 
-  -y, --flip         Flip the image when saving.
+  -y, --flip        Flip the image(s) when saving.
 
-  --help             Display this help screen.
+  --help            Display this help screen.
 
-  --version          Display version information.
+  --version         Display version information.
 
-  input (pos. 0)     Required. The 3DST file to convert.
-
-  output (pos. 1)    Required. The image file save location.
+  input (pos. 0)    Required. The 3DST file(s) to convert.
 ```  
 
 ### To-do list  
@@ -64,7 +64,6 @@ The project is in a **very early** state, since it's my first time coding in C# 
 
 - Write the documentation  
 - Test compatibility on Linux
-- Support for multiple images at once (multithreading?)
 
 ## Build  
 To build the tool, you will need .NET Core 3.1 and the following NuGet packages:  
@@ -80,4 +79,4 @@ This project can licensed under the [LGPL-3.0](LICENSE) license or any later ver
 Credits to:  
 
 - The [3DS Apps Revival Team](https://discord.gg/2nCGTHSV9e) for making the initial investigation about the inner workings of Nintendo Anime Channel.  
-- [gdkchan](https://github.com/gdkchan) and the [Ohana3DS-Rebirth](https://github.com/gdkchan/Ohana3DS-Rebirth) project for some code regarding the RGBA8 color format.  
+- [gdkchan](https://github.com/gdkchan) and the [Ohana3DS-Rebirth](https://github.com/gdkchan/Ohana3DS-Rebirth) project for some code regarding the various color formats.  
