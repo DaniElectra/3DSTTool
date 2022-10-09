@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SkiaSharp;
 using System.IO;
+using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters;
 using System.Text;
 
@@ -9,12 +10,13 @@ namespace _3DSTTool
 {
     internal class Encode
     {
-        public static int EncodeImage(string input,
-                                      string output,
-                                      short width_given,
-                                      short height_given,
-                                      string format_output,
-                                      bool flip)
+        public static async Task<int> EncodeImage(string input,
+                                                  string output_given,
+                                                  short width_given,
+                                                  short height_given,
+                                                  string format_output,
+                                                  bool flip,
+                                                  bool use_taskid)
         {
             SKBitmap bitmap = SKBitmap.Decode(input);
             short width = (short)bitmap.Width;
@@ -76,7 +78,7 @@ namespace _3DSTTool
             if (flip)
             {
                 SKCanvas canvas = new SKCanvas(new_bitmap);
-                canvas.Scale(1, -1, 0, new_bitmap.Height / 2);
+                canvas.Scale(1, -1, 0, new_height / 2);
                 canvas.DrawBitmap(new_bitmap, new SKPoint());
             }
 
@@ -87,22 +89,22 @@ namespace _3DSTTool
             {
                 case "rgba8":
                     format = 0;
-                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height * 4];
+                    bitmap_raw = new byte[new_width * new_height * 4];
                     RGBA8.Encode(new_bitmap, bitmap_raw);
                     break;
                 case "rgb8":
                     format = 1;
-                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height * 3];
+                    bitmap_raw = new byte[new_width * new_height * 3];
                     RGB8.Encode(new_bitmap, bitmap_raw);
                     break;
                 case "a8":
                     format = 2;
-                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height];
+                    bitmap_raw = new byte[new_width * new_height];
                     A8.Encode(new_bitmap, bitmap_raw);
                     break;
                 case "rgba4":
                     format = 7;
-                    bitmap_raw = new byte[new_bitmap.Width * new_bitmap.Height * 2];
+                    bitmap_raw = new byte[new_width * new_height * 2];
                     RGBA4.Encode(new_bitmap, bitmap_raw);
                     break;
                 default:
@@ -123,12 +125,31 @@ namespace _3DSTTool
             write_header.Write(format);
             write_header.Close();
 
+            string output = output_given;
+            
+            // If output isn't specified, get file extension for output from input
+            output ??= Path.ChangeExtension(input, "3dst");
+
+            string output_path = Path.GetDirectoryName(output);
+            string output_filename = Path.GetFileNameWithoutExtension(output);
+            string output_extension = Path.GetExtension(output);
+
+            // If more than one input was given and output was specified, enumerate the files using Task ID
+            if (use_taskid == true)
+            {
+                output = Path.Combine(output_path, output_filename + Task.CurrentId + output_extension);
+            }
+            
             // Write the header and the data to given output
             var output_file = File.OpenWrite(output);
             var file_write = new BinaryWriter(output_file);
             file_write.Write(header);
             file_write.Write(bitmap_raw);
             file_write.Close();
+
+            // If file was encoded without errors, inform about that on the command line
+            Console.WriteLine("{0} encoded successfully!\n" +
+                "Result {1} file was saved into {2}", input, format_output, output);
             return 0;
         }
     }
