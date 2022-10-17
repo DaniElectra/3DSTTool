@@ -59,7 +59,7 @@ The project is in a **very early** state, since it's my first time coding in C# 
 | A8       |       ✅       |
 | ETC1     |       ❌       |
 | RGBA5551 |       ❌       |
-| RGBA565  |       ✅       |
+| RGB565   |       ✅       |
 | RGBA4    |       ✅       | 
 
 - Write the documentation  
