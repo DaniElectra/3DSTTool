@@ -9,81 +9,78 @@ namespace _3DSTTool
     // You can look at the original code here: https://github.com/gdkchan/Ohana3DS-Rebirth/blob/master/Ohana3DS%20Rebirth/Ohana/TextureCodec.cs
     internal class RGBA5551
     {
-        // The order that pixels have per block in this format
-        private static int[] tile_order = { 0, 1, 8, 9, 2, 3, 10, 11, 16, 17, 24, 25, 18, 19, 26, 27, 4, 5, 12, 13, 6, 7, 14, 15, 20, 21, 28, 29, 22, 23, 30, 31, 32, 33, 40, 41, 34, 35, 42, 43, 48, 49, 56, 57, 50, 51, 58, 59, 36, 37, 44, 45, 38, 39, 46, 47, 52, 53, 60, 61, 54, 55, 62, 63 };
-
         public static void Encode(SKBitmap bitmap, byte[] output)
         {
-            int pixel_count = 0;
+            int pixelCount = 0;
 
             // Divide the pixels in blocks
-            for (int By = 0; By < bitmap.Height / 8; By++)
+            for (int bX = 0; bX < bitmap.Height / 8; bX++)
             {
-                for (int Bx = 0; Bx < bitmap.Width / 8; Bx++)
+                for (int bY = 0; bY < bitmap.Width / 8; bY++)
                 {
-                    for (int tile_count = 0; tile_count < 64; tile_count++)
+                    for (int tileCount = 0; tileCount < 64; tileCount++)
                     {
                         // Load pixels in specified order by tileOrder
-                        int x = tile_order[tile_count] % 8;
-                        int y = (tile_order[tile_count] - x) / 8;
-                        int pixel_x = Bx * 8 + x;
-                        int pixel_y = By * 8 + y;
+                        int x = Program.TileOrder[tileCount] % 8;
+                        int y = (Program.TileOrder[tileCount] - x) / 8;
+                        int pixelX = bY * 8 + x;
+                        int pixelY = bX * 8 + y;
 
                         // Get color parameters for specified pixel
-                        SKColor pixel_color = bitmap.GetPixel(pixel_x, pixel_y);
-                        byte red = (byte)(pixel_color.Red >> 3); // 5 bits
-                        byte green = (byte)(pixel_color.Green >> 3); // 5 bits
-                        byte blue = (byte)(pixel_color.Blue >> 3); // 5 bits
-                        byte alpha = (byte)(pixel_color.Alpha / 0xff); // 1 bit
+                        SKColor pixelColor = bitmap.GetPixel(pixelX, pixelY);
+                        byte red = (byte)(pixelColor.Red >> 3); // 5 bits
+                        byte green = (byte)(pixelColor.Green >> 3); // 5 bits
+                        byte blue = (byte)(pixelColor.Blue >> 3); // 5 bits
+                        byte alpha = (byte)(pixelColor.Alpha / 0xff); // 1 bit
 
                         // Convert bytes into a short with color bytes aligned
                         short color = (short)((red << 11) | (green << 6) | (blue << 1) | alpha);
 
                         // Move blue and red to left side of byte
-                        output[tile_count * 2 + pixel_count] = (byte)color;
-                        output[tile_count * 2 + pixel_count + 1] = (byte)(color >> 8);
+                        output[tileCount * 2 + pixelCount] = (byte)color;
+                        output[tileCount * 2 + pixelCount + 1] = (byte)(color >> 8);
                     }
-                    pixel_count += 128;
+                    pixelCount += 128;
                 }
             }
         }
 
         public static void Decode(byte[] input, short width, short height, SKBitmap bitmap)
         {
-            int byte_count = 0;
-            int pixel_count = 0;
+            int byteCount = 0;
+            int pixelCount = 0;
 
             // Divide the pixels in blocks
-            for (int By = 0; By < height / 8; By++)
+            for (int bY = 0; bY < height / 8; bY++)
             {
-                for (int Bx = 0; Bx < width / 8; Bx++)
+                for (int bX = 0; bX < width / 8; bX++)
                 {
-                    for (int tile_count = 0; tile_count < 64; tile_count++)
+                    for (int tileCount = 0; tileCount < 64; tileCount++)
                     {
                         // Load pixels in specified order by tileOrder
-                        int x = tile_order[tile_count] % 8;
-                        int y = (tile_order[tile_count] - x) / 8;
-                        int pixel_x = Bx * 8 + x;
-                        int pixel_y = By * 8 + y;
+                        int x = Program.TileOrder[tileCount] % 8;
+                        int y = (Program.TileOrder[tileCount] - x) / 8;
+                        int pixelX = bX * 8 + x;
+                        int pixelY = bY * 8 + y;
 
                         // Extract the global color from the two bytes for easier extraction of colors
-                        short color = (short)(input[tile_count * 2 + pixel_count] | (input[tile_count * 2 + pixel_count + 1] << 8));
+                        short color = (short)(input[tileCount * 2 + pixelCount] | (input[tileCount * 2 + pixelCount + 1] << 8));
 
                         // Save the color parameters on integers, extracting the colors from short
                         byte red = (byte)(((color >> 11) & 0x1f) << 3);
-                        byte_count++;
+                        byteCount++;
                         byte green = (byte)(((color >> 6) & 0x1f) << 3);
-                        byte_count++;
+                        byteCount++;
                         byte blue = (byte)(((color >> 1) & 0x1f) << 3);
-                        byte_count++;
+                        byteCount++;
                         byte alpha = (byte)((color & 1) * 0xff);
-                        byte_count++;
+                        byteCount++;
 
                         // Save the pixel into the bitmap
-                        SKColor pixel_color = new SKColor(red, green, blue, alpha);
-                        bitmap.SetPixel(pixel_x, pixel_y, pixel_color);
+                        SKColor pixelColor = new SKColor(red, green, blue, alpha);
+                        bitmap.SetPixel(pixelX, pixelY, pixelColor);
                     }
-                    pixel_count += 128;
+                    pixelCount += 128;
                 }
             }
         }

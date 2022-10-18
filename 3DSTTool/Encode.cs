@@ -10,115 +10,121 @@ namespace _3DSTTool
 {
     internal class Encode
     {
-        public static async Task<int> EncodeImage(string input,
-                                                  string output_given,
-                                                  short width_given,
-                                                  short height_given,
-                                                  string format_output,
-                                                  bool flip,
-                                                  bool use_taskid)
+        public static Task<int> EncodeImage(string input,
+                                            string outputGiven,
+                                            short widthGiven,
+                                            short heightGiven,
+                                            string formatOutput,
+                                            bool flip,
+                                            bool useTaskId)
         {
             SKBitmap bitmap = SKBitmap.Decode(input);
             short width = (short)bitmap.Width;
             short height = (short)bitmap.Height;
 
-            short new_width = width;
-            short new_height = height;
-            double width_power;
-            double height_power;
+            short newWidth = width;
+            short newHeight = height;
+            double widthPower;
+            double heightPower;
 
             // Check if given width and / or height exists
-            if (width_given != 0)
+            if (widthGiven != 0)
             {
                 // If it's a power of 2, save the value to resize the bitmap
-                width_power = Math.Log2(width_given);
-                if (width_power % 1 == 0)
+                widthPower = Math.Log2(widthGiven);
+                if (widthPower % 1 == 0)
                 {
-                    new_width = width_given;
+                    newWidth = widthGiven;
                 }
             }
-            if (height_given != 0)
+            if (heightGiven != 0)
             {
                 // If it's a power of 2, save the value to resize the bitmap
-                height_power = Math.Log2(height_given);
-                if (height_power % 1 == 0)
+                heightPower = Math.Log2(heightGiven);
+                if (heightPower % 1 == 0)
                 {
-                    new_height = height_given;
+                    newHeight = heightGiven;
                 }
             }
 
             // In case there are resoulution parameters missing, we'll use the image parameters
-            if (new_width == width)
+            if (newWidth == width)
             {
                 // Check if original resolution is a power of 2
-                width_power = Math.Log2(width);
-                if (width_power % 1 != 0)
+                widthPower = Math.Log2(width);
+                if (widthPower % 1 != 0)
                 {
                     // Round resolution to next power of 2
-                    new_width = (short)Math.Pow(2, Math.Ceiling(width_power));
+                    newWidth = (short)Math.Pow(2, Math.Ceiling(widthPower));
                 }
             }
-            if (new_height == height)
+            if (newHeight == height)
             {
                 // Check if original resolution is a power of 2
-                height_power = Math.Log2(height);
-                if (height_power % 1 != 0)
+                heightPower = Math.Log2(height);
+                if (heightPower % 1 != 0)
                 {
                     // Round resolution to next power of 2
-                    new_height = (short)Math.Pow(2, Math.Ceiling(height_power));
+                    newHeight = (short)Math.Pow(2, Math.Ceiling(heightPower));
                 }
             }
 
             // Assign the resolution to the bitmap
-            SKBitmap new_bitmap = new SKBitmap(new_width, new_height);
-            bitmap.ScalePixels(new_bitmap, SKFilterQuality.High);
+            SKBitmap newBitmap = new SKBitmap(newWidth, newHeight);
+            bitmap.ScalePixels(newBitmap, SKFilterQuality.High);
 
             // Since the Nintendo 3DS flips the images when loading,
             // give the option to do the same when encoding
             if (flip)
             {
-                SKCanvas canvas = new SKCanvas(new_bitmap);
-                canvas.Scale(1, -1, 0, new_height / 2);
-                canvas.DrawBitmap(new_bitmap, new SKPoint());
+                SKCanvas canvas = new SKCanvas(newBitmap);
+                canvas.Scale(1, -1, 0, newHeight / 2);
+                canvas.DrawBitmap(newBitmap, new SKPoint());
             }
 
             // Encode the image with the proper format
             byte format;
-            byte[] bitmap_raw;
-            switch (format_output)
+            byte[] bitmapRaw;
+            switch (formatOutput)
             {
                 case "rgba8":
                     format = 0;
-                    bitmap_raw = new byte[new_width * new_height * 4];
-                    RGBA8.Encode(new_bitmap, bitmap_raw);
+                    bitmapRaw = new byte[newWidth * newHeight * 4];
+                    RGBA8.Encode(newBitmap, bitmapRaw);
                     break;
                 case "rgb8":
                     format = 1;
-                    bitmap_raw = new byte[new_width * new_height * 3];
-                    RGB8.Encode(new_bitmap, bitmap_raw);
+                    bitmapRaw = new byte[newWidth * newHeight * 3];
+                    RGB8.Encode(newBitmap, bitmapRaw);
                     break;
                 case "a8":
                     format = 2;
-                    bitmap_raw = new byte[new_width * new_height];
-                    A8.Encode(new_bitmap, bitmap_raw);
+                    bitmapRaw = new byte[newWidth * newHeight];
+                    A8.Encode(newBitmap, bitmapRaw);
                     break;
+                case "etc1":
+                    // format = 4;
+                    // bitmapRaw = new byte[newWidth * newHeight / 2];
+                    // ETC1.Encode(newBitmap, bitmapRaw);
+                    // break;
+                    throw new NotImplementedException("ETC1 format currently not supported!");
                 case "rgba5551":
                     format = 5;
-                    bitmap_raw = new byte[new_width * new_height * 2];
-                    RGBA5551.Encode(new_bitmap, bitmap_raw);
+                    bitmapRaw = new byte[newWidth * newHeight * 2];
+                    RGBA5551.Encode(newBitmap, bitmapRaw);
                     break;
                 case "rgb565":
                     format = 6;
-                    bitmap_raw = new byte[new_width * new_height * 2];
-                    RGB565.Encode(new_bitmap, bitmap_raw);
+                    bitmapRaw = new byte[newWidth * newHeight * 2];
+                    RGB565.Encode(newBitmap, bitmapRaw);
                     break;
                 case "rgba4":
                     format = 7;
-                    bitmap_raw = new byte[new_width * new_height * 2];
-                    RGBA4.Encode(new_bitmap, bitmap_raw);
+                    bitmapRaw = new byte[newWidth * newHeight * 2];
+                    RGBA4.Encode(newBitmap, bitmapRaw);
                     break;
                 default:
-                    throw new NotImplementedException("Selected format currently not supported!");
+                    throw new InvalidOperationException("Invalid pixel format!");
             }
 
             // Get bytearray for word 'texture' for the header
@@ -126,41 +132,41 @@ namespace _3DSTTool
             
             // Write the header
             byte[] header = new byte[0x80];
-            MemoryStream header_memory = new MemoryStream(header);
-            var write_header = new BinaryWriter(header_memory);
-            write_header.Write(magic);
-            write_header.Seek(0x10, SeekOrigin.Begin);
-            write_header.Write(new_width);
-            write_header.Write(new_height);
-            write_header.Write(format);
-            write_header.Close();
+            MemoryStream headerMemory = new MemoryStream(header);
+            var writeHeader = new BinaryWriter(headerMemory);
+            writeHeader.Write(magic);
+            writeHeader.Seek(0x10, SeekOrigin.Begin);
+            writeHeader.Write(newWidth);
+            writeHeader.Write(newHeight);
+            writeHeader.Write(format);
+            writeHeader.Close();
 
-            string output = output_given;
+            string output = outputGiven;
             
             // If output isn't specified, get file extension for output from input
             output ??= Path.ChangeExtension(input, "3dst");
 
-            string output_path = Path.GetDirectoryName(output);
-            string output_filename = Path.GetFileNameWithoutExtension(output);
-            string output_extension = Path.GetExtension(output);
+            string outputPath = Path.GetDirectoryName(output);
+            string outputFilename = Path.GetFileNameWithoutExtension(output);
+            string outputExtension = Path.GetExtension(output);
 
             // If more than one input was given and output was specified, enumerate the files using Task ID
-            if (use_taskid == true)
+            if (useTaskId == true)
             {
-                output = Path.Combine(output_path, output_filename + Task.CurrentId + output_extension);
+                output = Path.Combine(outputPath, outputFilename + Task.CurrentId + outputExtension);
             }
             
             // Write the header and the data to given output
-            var output_file = File.OpenWrite(output);
-            var file_write = new BinaryWriter(output_file);
-            file_write.Write(header);
-            file_write.Write(bitmap_raw);
-            file_write.Close();
+            var outputFile = File.OpenWrite(output);
+            var fileWrite = new BinaryWriter(outputFile);
+            fileWrite.Write(header);
+            fileWrite.Write(bitmapRaw);
+            fileWrite.Close();
 
             // If file was encoded without errors, inform about that on the command line
             Console.WriteLine("{0} encoded successfully!\n" +
-                "Result {1} file was saved into {2}", input, format_output, output);
-            return 0;
+                "Result {1} file was saved into {2}", input, formatOutput, output);
+            return Task.FromResult(0);
         }
     }
 }

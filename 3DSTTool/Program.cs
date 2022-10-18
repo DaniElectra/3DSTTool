@@ -10,6 +10,10 @@ namespace _3DSTTool
 {
     internal class Program
     {
+        // The color formats are calculated using blocks.
+        // Store the order that pixels have per block in public int[]
+        public static readonly int[] TileOrder = { 0, 1, 8, 9, 2, 3, 10, 11, 16, 17, 24, 25, 18, 19, 26, 27, 4, 5, 12, 13, 6, 7, 14, 15, 20, 21, 28, 29, 22, 23, 30, 31, 32, 33, 40, 41, 34, 35, 42, 43, 48, 49, 56, 57, 50, 51, 58, 59, 36, 37, 44, 45, 38, 39, 46, 47, 52, 53, 60, 61, 54, 55, 62, 63 };
+
         // Set possible arguments for encoding and decoding
         [Verb("encode", HelpText = "Convert an image file to a 3DST file.")]
         public class EncodeOptions
@@ -79,19 +83,20 @@ namespace _3DSTTool
 
             // If there's more than one input, tell the encoder to add the Task ID
             // to the output filename when it's given by the user
-            bool use_taskid = false;
+            bool useTaskId = false;
             if (input.Count() > 1 && output != null)
             {
-                use_taskid = true;
+                useTaskId = true;
             }
 
             var tasks = new List<Task>();
+            var result = 0;
             foreach (var i in input)
             {
-                tasks.Add(Task.Run(async() => await Encode.EncodeImage(i, output, width, height, format, flip, use_taskid)));
+                tasks.Add(Task.Run(async() => result += await Encode.EncodeImage(i, output, width, height, format, flip, useTaskId)));
             }
             await Task.WhenAll(tasks);
-            return 0;
+            return result;
         }
 
         static async Task<int> DecodeParser(DecodeOptions opts)
@@ -105,19 +110,20 @@ namespace _3DSTTool
 
             // If there's more than one input, tell the decoder to add the Task ID
             // to the output filename when it's given by the user
-            bool use_taskid = false;
+            bool useTaskId = false;
             if (input.Count() > 1 && output != null)
             {
-                use_taskid = true;
+                useTaskId = true;
             }
 
             var tasks = new List<Task>();
+            var result = 0;
             foreach (var i in input)
             {
-                tasks.Add(Task.Run(async() => await Decode.DecodeImage(i, output, width, height, format, flip, use_taskid)));
+                tasks.Add(Task.Run(async() => result += await Decode.DecodeImage(i, output, width, height, format, flip, useTaskId)));
             }
             await Task.WhenAll(tasks);
-            return 0;
+            return result;
         }
     }
 }
