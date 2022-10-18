@@ -57,6 +57,9 @@ namespace _3DSTTool
                 case 2:
                     A8.Decode(data, width, height, bitmap);
                     break;
+                case 5:
+                    RGBA5551.Decode(data, width, height, bitmap);
+                    break;
                 case 6:
                     RGB565.Decode(data, width, height, bitmap);
                     break;

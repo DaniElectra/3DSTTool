@@ -102,6 +102,11 @@ namespace _3DSTTool
                     bitmap_raw = new byte[new_width * new_height];
                     A8.Encode(new_bitmap, bitmap_raw);
                     break;
+                case "rgba5551":
+                    format = 5;
+                    bitmap_raw = new byte[new_width * new_height * 2];
+                    RGBA5551.Encode(new_bitmap, bitmap_raw);
+                    break;
                 case "rgb565":
                     format = 6;
                     bitmap_raw = new byte[new_width * new_height * 2];

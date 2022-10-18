@@ -27,7 +27,7 @@ namespace _3DSTTool
             public short Height { get; set; }
 
             [Option('f', "format", Default = "rgba8", HelpText = "The format type to use when saving.\n" +
-                "Available options: rgba8, rgb8, a8, rgb565, rgba4")]
+                "Available options: rgba8, rgb8, a8, rgba5551, rgb565, rgba4")]
             public string Format { get; set; }
             
             [Option('y', "flip", HelpText = "Flip the image(s) when saving.")]
