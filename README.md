@@ -63,14 +63,26 @@ The project is in a **very early** state, since it's my first time coding in C# 
 | RGBA4    |       ✅       | 
 
 - Write the documentation  
-- Test compatibility on Linux
 
-## Build  
+
+## Building  
 To build the tool, you will need .NET Core 3.1 and the following NuGet packages:  
 
-- [CommandLineParser](https://www.nuget.org/packages/CommandLineParser) 2.9.1  
-- [SkiaSharp](https://www.nuget.org/packages/SkiaSharp) 2.88.2  
-- [System.Memory.Data](https://www.nuget.org/packages/System.Memory.Data) 6.0.0
+- [CommandLineParser](https://www.nuget.org/packages/CommandLineParser) 2.9.1+  
+- [SkiaSharp](https://www.nuget.org/packages/SkiaSharp) 2.88.3+  
+- [System.Memory.Data](https://www.nuget.org/packages/System.Memory.Data) 6.0.0+
+
+## Note for Linux users  
+To use this tool under Linux, you will need to install the proper package for your distro. You can learn more about this issue [here](https://github.com/mono/SkiaSharp/wiki/SkiaSharp-Native-Assets-for-Linux).  
+
+### The generic solution  
+You can try adding the following NuGet package as a dependency to the project: [SkiaSharp.NativeAssets.Linux](https://www.nuget.org/packages/SkiaSharp.NativeAssets.Linux).  
+
+### For Arch-based distros  
+In some distributions like Arch Linux, you can install the SkiaSharp library as a system package:  
+```shell
+sudo pacman -S skia-sharp
+```
 
 ## License  
 This project can licensed under the [LGPL-3.0](LICENSE) license or any later version.  
