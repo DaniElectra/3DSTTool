@@ -10,6 +10,20 @@ namespace _3DSTTool
 {
     internal class Encode
     {
+        /// <summary>
+        /// Encode an image stored in <paramref name="input"/> path as the
+        /// selected 3DST format, and store the result on given path.
+        /// </summary>
+        /// <param name="input">The path of the image to encode.</param>
+        /// <param name="outputGiven">Where to store the 3DST result.</param>
+        /// <param name="widthGiven">Scale the image to given width.</param>
+        /// <param name="heightGiven">Scale the image to given height.</param>
+        /// <param name="formatOutput">The 3DST color format to use.</param>
+        /// <param name="flip">If set to true, flip the image vertically.</param>
+        /// <param name="useTaskId">Whether to add Task ID to output filename to avoid name collision.</param>
+        /// <returns>An integer representing the state of the operation (0 = success, 1 = failed).</returns>
+        /// <exception cref="NotImplementedException">Thrown if selected color format is currently not supported.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if selected color format is invalid.</exception>
         public static Task<int> EncodeImage(string input,
                                             string outputGiven,
                                             short widthGiven,

@@ -9,6 +9,20 @@ namespace _3DSTTool
 {
     internal class Decode
     {
+        /// <summary>
+        /// Decode a given 3DST image stored in <paramref name="input"/> path as the
+        /// selected 3DST format, and store the result on given path.
+        /// </summary>
+        /// <param name="input">The path of the 3DST image to decode.</param>
+        /// <param name="outputGiven">Where to store the image result.</param>
+        /// <param name="widthGiven">Scale the image to given width.</param>
+        /// <param name="heightGiven">Scale the image to given height.</param>
+        /// <param name="formatOutput">The image format to use when saving.</param>
+        /// <param name="flip">If set to true, flip the image vertically.</param>
+        /// <param name="useTaskId">Whether to add Task ID to output filename to avoid name collision.</param>
+        /// <returns>An integer representing the state of the operation (0 = success, 1 = failed).</returns>
+        /// <exception cref="NotImplementedException">Thrown if given color format is currently not supported.</exception>
+        /// <exception cref="InvalidOperationException">Thrown whether if invalid 3DST color format or invalid output format.</exception>
         public static Task<int> DecodeImage(string input,
                                             string outputGiven,
                                             short widthGiven,
@@ -189,7 +203,7 @@ namespace _3DSTTool
                     newBitmap.Encode(saveFile, SKEncodedImageFormat.Webp, 80);
                     break;
                 default:
-                    throw new Exception("Unsupported output format!");
+                    throw new InvalidOperationException("Invalid output format!");
             }
 
             // If file was decoded without errors, inform about that on the command line

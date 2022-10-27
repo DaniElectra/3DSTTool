@@ -9,6 +9,12 @@ namespace _3DSTTool
     // You can look at the original code here: https://github.com/gdkchan/Ohana3DS-Rebirth/blob/master/Ohana3DS%20Rebirth/Ohana/TextureCodec.cs
     internal class RGB8
     {
+        /// <summary>
+        /// Encode a given SkiaSharp bitmap into RGB8 color
+        /// format, and store the result in a bytearray.
+        /// </summary>
+        /// <param name="bitmap">The given SkiaSharp bitmap.</param>
+        /// <param name="output">The bytearray where storing the result.</param>
         public static void Encode(SKBitmap bitmap, byte[] output)
         {
             int pixelCount = 0;
@@ -37,6 +43,14 @@ namespace _3DSTTool
             }
         }
 
+        /// <summary>
+        /// Decode a given RGB8 image using given resolution as reference,
+        /// and store the result in a SkiaSharp bitmap.
+        /// </summary>
+        /// <param name="input">The given RGB8 image as bytearray.</param>
+        /// <param name="width">The width of the image.</param>
+        /// <param name="height">The height of the image.</param>
+        /// <param name="bitmap">The SkiaSharp bitmap where storing the result.</param>
         public static void Decode(byte[] input, short width, short height, SKBitmap bitmap)
         {
             int byteCount = 0;
