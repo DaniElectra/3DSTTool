@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="SkiaSharp" Version="2.88.2" />
+    <PackageReference Include="SkiaSharp" Version="2.88.3" />
     <PackageReference Include="System.Memory.Data" Version="6.0.0" />
   </ItemGroup>
 
