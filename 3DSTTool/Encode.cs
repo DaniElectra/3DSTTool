@@ -21,16 +21,16 @@ namespace _3DSTTool
         /// <param name="formatOutput">The 3DST color format to use.</param>
         /// <param name="flip">If set to true, flip the image vertically.</param>
         /// <param name="useTaskId">Whether to add Task ID to output filename to avoid name collision.</param>
-        /// <returns>An integer representing the state of the operation (0 = success, 1 = failed).</returns>
+        /// <returns>The state of the operation.</returns>
         /// <exception cref="NotImplementedException">Thrown if selected color format is currently not supported.</exception>
         /// <exception cref="InvalidOperationException">Thrown if selected color format is invalid.</exception>
-        public static Task<int> EncodeImage(string input,
-                                            string outputGiven,
-                                            short widthGiven,
-                                            short heightGiven,
-                                            string formatOutput,
-                                            bool flip,
-                                            bool useTaskId)
+        public static Task EncodeImage(string input,
+                                       string outputGiven,
+                                       short widthGiven,
+                                       short heightGiven,
+                                       string formatOutput,
+                                       bool flip,
+                                       bool useTaskId)
         {
             SKBitmap bitmap = SKBitmap.Decode(input);
             short width = (short)bitmap.Width;
@@ -121,7 +121,8 @@ namespace _3DSTTool
                     // bitmapRaw = new byte[newWidth * newHeight / 2];
                     // ETC1.Encode(newBitmap, bitmapRaw);
                     // break;
-                    throw new NotImplementedException("ETC1 format currently not supported!");
+                    Console.WriteLine("{0}: ETC1 format currently not supported!", input);
+                    return Task.FromException(new NotImplementedException());
                 case "rgba5551":
                     format = 5;
                     bitmapRaw = new byte[newWidth * newHeight * 2];
@@ -138,7 +139,8 @@ namespace _3DSTTool
                     RGBA4.Encode(newBitmap, bitmapRaw);
                     break;
                 default:
-                    throw new InvalidOperationException("Invalid pixel format!");
+                    Console.WriteLine("{0}: Invalid color format!", input);
+                    return Task.FromException(new InvalidOperationException());
             }
 
             // Get bytearray for word 'texture' for the header

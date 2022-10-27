@@ -20,16 +20,16 @@ namespace _3DSTTool
         /// <param name="formatOutput">The image format to use when saving.</param>
         /// <param name="flip">If set to true, flip the image vertically.</param>
         /// <param name="useTaskId">Whether to add Task ID to output filename to avoid name collision.</param>
-        /// <returns>An integer representing the state of the operation (0 = success, 1 = failed).</returns>
+        /// <returns>The state of the operation.</returns>
         /// <exception cref="NotImplementedException">Thrown if given color format is currently not supported.</exception>
-        /// <exception cref="InvalidOperationException">Thrown whether if invalid 3DST color format or invalid output format.</exception>
-        public static Task<int> DecodeImage(string input,
-                                            string outputGiven,
-                                            short widthGiven,
-                                            short heightGiven,
-                                            string formatOutput,
-                                            bool flip,
-                                            bool useTaskId)
+        /// <exception cref="InvalidOperationException">Thrown whether if invalid 3DST file or format, or invalid output format.</exception>
+        public static Task DecodeImage(string input,
+                                       string outputGiven,
+                                       short widthGiven,
+                                       short heightGiven,
+                                       string formatOutput,
+                                       bool flip,
+                                       bool useTaskId)
         {
             var inputFile = File.OpenRead(input);
             BinaryReader inputRead = new BinaryReader(inputFile);
@@ -39,7 +39,7 @@ namespace _3DSTTool
             if (magic != "texture")
             {
                 Console.WriteLine("{0}: Invalid 3DST file!", input);
-                return Task.FromResult(1);
+                return Task.FromException(new InvalidOperationException());
             }
 
             // Skip the null bytes
@@ -74,7 +74,8 @@ namespace _3DSTTool
                 case 4:
                     // ETC1.Decode(data, width, height, bitmap);
                     // break;
-                    throw new NotImplementedException("ETC1 format currently not supported!");
+                    Console.WriteLine("{0}: ETC1 format currently not supported!", input);
+                    return Task.FromException(new NotImplementedException());
                 case 5:
                     RGBA5551.Decode(data, width, height, bitmap);
                     break;
@@ -85,7 +86,8 @@ namespace _3DSTTool
                     RGBA4.Decode(data, width, height, bitmap);
                     break;
                 default:
-                    throw new InvalidOperationException("3DST file format is invalid!");
+                    Console.WriteLine("{0}: 3DST file format is invalid!", input);
+                    return Task.FromException(new InvalidOperationException());
             }
 
             short newWidth = width;
@@ -203,7 +205,8 @@ namespace _3DSTTool
                     newBitmap.Encode(saveFile, SKEncodedImageFormat.Webp, 80);
                     break;
                 default:
-                    throw new InvalidOperationException("Invalid output format!");
+                    Console.WriteLine("{0}: Invalid output format!", input);
+                    return Task.FromException(new InvalidOperationException());
             }
 
             // If file was decoded without errors, inform about that on the command line

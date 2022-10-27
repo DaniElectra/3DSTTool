@@ -90,12 +90,26 @@ namespace _3DSTTool
             }
 
             var tasks = new List<Task>();
+            Task runTasks = null;
             var result = 0;
-            foreach (var i in input)
+            
+            try
             {
-                tasks.Add(Task.Run(async() => result += await Encode.EncodeImage(i, output, width, height, format, flip, useTaskId)));
+                // Make list of tasks for each 3DST file and run them
+                foreach (var i in input)
+                {
+                    tasks.Add(Task.Run(async () => await Encode.EncodeImage(i, output, width, height, format, flip, useTaskId)));
+                }
+                runTasks = Task.WhenAll(tasks);
+                await runTasks;
             }
-            await Task.WhenAll(tasks);
+            catch (Exception)
+            {
+                foreach (var innerEx in runTasks?.Exception?.InnerExceptions)
+                {
+                    result++; // Count each exception that happens to return number of exceptions
+                }
+            }
             return result;
         }
 
@@ -117,12 +131,26 @@ namespace _3DSTTool
             }
 
             var tasks = new List<Task>();
+            Task runTasks = null;
             var result = 0;
-            foreach (var i in input)
+
+            try
             {
-                tasks.Add(Task.Run(async() => result += await Decode.DecodeImage(i, output, width, height, format, flip, useTaskId)));
+                // Make list of tasks for each 3DST file and run them
+                foreach (var i in input)
+                {
+                    tasks.Add(Task.Run(async () => await Decode.DecodeImage(i, output, width, height, format, flip, useTaskId)));
+                }
+                runTasks = Task.WhenAll(tasks);
+                await runTasks;
             }
-            await Task.WhenAll(tasks);
+            catch (Exception)
+            {
+                foreach (var innerEx in runTasks?.Exception?.InnerExceptions)
+                {
+                    result++; // Count each exception that happens to return number of exceptions
+                }
+            }
             return result;
         }
     }
