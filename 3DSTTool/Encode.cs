@@ -149,7 +149,7 @@ namespace _3DSTTool
             // Write the header
             byte[] header = new byte[0x80];
             MemoryStream headerMemory = new MemoryStream(header);
-            var writeHeader = new BinaryWriter(headerMemory);
+            BinaryWriter writeHeader = new BinaryWriter(headerMemory);
             writeHeader.Write(magic);
             writeHeader.Seek(0x10, SeekOrigin.Begin);
             writeHeader.Write(newWidth);
@@ -171,10 +171,10 @@ namespace _3DSTTool
             {
                 output = Path.Combine(outputPath, outputFilename + Task.CurrentId + outputExtension);
             }
-            
+
             // Write the header and the data to given output
-            var outputFile = File.OpenWrite(output);
-            var fileWrite = new BinaryWriter(outputFile);
+            FileStream outputFile = File.OpenWrite(output);
+            BinaryWriter fileWrite = new BinaryWriter(outputFile);
             fileWrite.Write(header);
             fileWrite.Write(bitmapRaw);
             fileWrite.Close();

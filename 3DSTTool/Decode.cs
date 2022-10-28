@@ -31,7 +31,7 @@ namespace _3DSTTool
                                        bool flip,
                                        bool useTaskId)
         {
-            var inputFile = File.OpenRead(input);
+            FileStream inputFile = File.OpenRead(input);
             BinaryReader inputRead = new BinaryReader(inputFile);
             string magic = Encoding.ASCII.GetString(inputRead.ReadBytes(7));
             

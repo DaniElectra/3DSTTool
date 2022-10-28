@@ -74,12 +74,12 @@ namespace _3DSTTool
 
         static async Task<int> EncodeParser(EncodeOptions opts)
         {
-            var input = opts.Input;
-            var output = opts.Output;
-            var width = opts.Width;
-            var height = opts.Height;
-            var format = opts.Format;
-            var flip = opts.Flip;
+            IEnumerable<string> input = opts.Input;
+            string output = opts.Output;
+            short width = opts.Width;
+            short height = opts.Height;
+            string format = opts.Format;
+            bool flip = opts.Flip;
 
             // If there's more than one input, tell the encoder to add the Task ID
             // to the output filename when it's given by the user
@@ -89,9 +89,9 @@ namespace _3DSTTool
                 useTaskId = true;
             }
 
-            var tasks = new List<Task>();
+            List<Task> tasks = new List<Task>();
             Task runTasks = null;
-            var result = 0;
+            int result = 0;
             
             try
             {
@@ -105,7 +105,7 @@ namespace _3DSTTool
             }
             catch (Exception)
             {
-                foreach (var innerEx in runTasks?.Exception?.InnerExceptions)
+                foreach (var innerEx in runTasks.Exception.InnerExceptions)
                 {
                     result++; // Count each exception that happens to return number of exceptions
                 }
@@ -115,12 +115,12 @@ namespace _3DSTTool
 
         static async Task<int> DecodeParser(DecodeOptions opts)
         {
-            var input = opts.Input;
-            var output = opts.Output;
-            var width = opts.Width;
-            var height = opts.Height;
-            var format = opts.Format;
-            var flip = opts.Flip;
+            IEnumerable<string> input = opts.Input;
+            string output = opts.Output;
+            short width = opts.Width;
+            short height = opts.Height;
+            string format = opts.Format;
+            bool flip = opts.Flip;
 
             // If there's more than one input, tell the decoder to add the Task ID
             // to the output filename when it's given by the user
@@ -130,9 +130,9 @@ namespace _3DSTTool
                 useTaskId = true;
             }
 
-            var tasks = new List<Task>();
+            List<Task> tasks = new List<Task>();
             Task runTasks = null;
-            var result = 0;
+            int result = 0;
 
             try
             {
@@ -146,7 +146,7 @@ namespace _3DSTTool
             }
             catch (Exception)
             {
-                foreach (var innerEx in runTasks?.Exception?.InnerExceptions)
+                foreach (var innerEx in runTasks.Exception.InnerExceptions)
                 {
                     result++; // Count each exception that happens to return number of exceptions
                 }

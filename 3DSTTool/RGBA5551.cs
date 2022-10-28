@@ -61,7 +61,6 @@ namespace _3DSTTool
         /// <param name="bitmap">The SkiaSharp bitmap where storing the result.</param>
         public static void Decode(byte[] input, short width, short height, SKBitmap bitmap)
         {
-            int byteCount = 0;
             int pixelCount = 0;
 
             // Divide the pixels in blocks
@@ -82,13 +81,9 @@ namespace _3DSTTool
 
                         // Save the color parameters on integers, extracting the colors from short
                         byte red = (byte)(((color >> 11) & 0x1f) << 3);
-                        byteCount++;
                         byte green = (byte)(((color >> 6) & 0x1f) << 3);
-                        byteCount++;
                         byte blue = (byte)(((color >> 1) & 0x1f) << 3);
-                        byteCount++;
                         byte alpha = (byte)((color & 1) * 0xff);
-                        byteCount++;
 
                         // Save the pixel into the bitmap
                         SKColor pixelColor = new SKColor(red, green, blue, alpha);
