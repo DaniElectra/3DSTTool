@@ -48,9 +48,9 @@
 ```  
 
 ### To-do list  
-The project is in a **very early** state, since it's my first time coding in C# from scratch. There are some pending features that I want to add:  
+Although the project is *almost* ready for final release, there are some missing features that I want to add before v1.0:  
 
-- Support for more 3DST image formats:  
+- Support for all 3DST image formats:  
 
 |          | Is supported? |
 |----------|:-------------:|
@@ -62,7 +62,7 @@ The project is in a **very early** state, since it's my first time coding in C# 
 | RGB565   |       ✅       |
 | RGBA4    |       ✅       | 
 
-- Write the documentation  
+- Write proper documentation (not just the help information)  
 
 
 ## Building  
